@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set image tag
+      id: tag
+      run: echo "::set-output name=tag::my-image-name:$(date +%s)"
+      
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag ${{ steps.tag.outputs.tag }}
+
